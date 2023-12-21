@@ -1,17 +1,14 @@
 from threading import Timer
-from py_localtunnel.lt import run_localtunnel
-
-__version__ = "1.0.6"
-
-def run_lt(port: int, subdomain: str = None):
-    run_localtunnel(port, subdomain)
+from py_localtunnel.tunnel import Tunnel
 
 from pymongo import MongoClient
-def start_lt(sever_id:int, port: int, subdomain: str = None):
-    lt_adress = run_lt(port, subdomain)
-    print(lt_adress)
+def run_localtunnel(sever_id:int, port: int, subdomain: str):
+    t = Tunnel()
+    url = t.get_url(subdomain)
+    sys.stdout.write(f"Your url is: {url}\n")
+    sys.stdout.flush()
 
-    ngrok_address = lt_adress
+    ngrok_address = url
 
     client = MongoClient("mongodb+srv://johnnyjana730:DEcbw3EIB0CIjciD@cluster0.wxhtomw.mongodb.net/?retryWrites=true&w=majority")
     db = client['search']  # Replace 'your_database_name' with your actual database name
@@ -31,6 +28,26 @@ def start_lt(sever_id:int, port: int, subdomain: str = None):
         pass
     ngrok_urls_collection.insert_one(data)
     # ngrok_urls_collection.insert_one({'url' + str(sever_id): ngrok_url})
+
+    sys.stdout.write(f"writed url to mango: {url}\n")
+    sys.stdout.flush()
+    
+    try:
+        t.create_tunnel(port)
+    except KeyboardInterrupt:
+        sys.stdout.write("\nKeyboardInterrupt: Stopping tunnel...\n")
+        sys.stdout.flush()
+
+    t.stop_tunnel()
+    os._exit(0)
+
+def run_lt(sever_id:int, port: int, subdomain: str = None):
+    run_localtunnel(sever_id, port, subdomain)
+
+def start_lt(sever_id:int, port: int, subdomain: str = None):
+    lt_adress = run_lt(sever_id, port, subdomain)
+    print(lt_adress)
+
 
 def run_with_lt(sever_id, app, subdomain: str = None):
     old_run = app.run
