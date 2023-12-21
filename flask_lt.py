@@ -1,5 +1,7 @@
 from threading import Timer
 from py_localtunnel.tunnel import Tunnel
+import os
+import sys
 
 from pymongo import MongoClient
 def run_localtunnel(sever_id:int, port: int, subdomain: str):
