@@ -7,7 +7,7 @@ def run_lt(port: int, subdomain: str = None):
     run_localtunnel(port, subdomain)
 
 from pymongo import MongoClient
-def start_lt(port: int, subdomain: str = None, sever_id):
+def start_lt(port: int, subdomain: str = None, sever_id = 1):
     lt_adress = run_lt(port, subdomain)
     print(lt_adress)
 
