@@ -32,7 +32,7 @@ def start_lt(sever_id:int, port: int, subdomain: str = None):
     ngrok_urls_collection.insert_one(data)
     # ngrok_urls_collection.insert_one({'url' + str(sever_id): ngrok_url})
 
-def run_with_lt(app, subdomain: str = None, sever_id = 1):
+def run_with_lt(sever_id, app, subdomain: str = None):
     old_run = app.run
 
     def new_run(*args, **kwargs):
